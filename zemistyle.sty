@@ -1,0 +1,139 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{zemistyle}[2025/06/15]
+
+
+% 版面設定（1段組み）
+\setlength{\topmargin}{30truemm}
+\addtolength{\topmargin}{-1truein}
+\setlength{\textheight}{242truemm}
+\setlength{\oddsidemargin}{20truemm}
+\addtolength{\oddsidemargin}{-1truein}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\textwidth}{170truemm}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\abovecaptionskip}{10\p@}
+\setlength{\belowcaptionskip}{10\p@}
+\pagestyle{empty}
+
+% --------------------------------------------------------------------
+% タイトル・要旨関連
+% --------------------------------------------------------------------
+\newbox\abstractbox
+\def\abstract{\global\setbox\abstractbox=\hbox\bgroup
+  \begin{minipage}[t]{.95\textwidth}\parindent=1.5em
+  \noindent\textbf{Abstract}\ }
+\def\endabstract{\end{minipage}\egroup}
+
+\renewcommand\maketitle{\par
+  \def\thefootnote{\fnsymbol{footnote}}
+  \begingroup
+    \if@twocolumn
+      \onecolumn\@maketitle
+    \else \newpage
+      \global\@topnum\z@\@maketitle
+    \fi
+    \@thanks
+  \endgroup
+  \let\maketitle\relax
+  \let\@maketitle\relax
+  \setcounter{footnote}{0}
+  \gdef\thefootnote{\arabic{footnote}}
+  \gdef\@title{}\gdef\@author{}\gdef\@date{}
+}
+
+\def\@maketitle{%
+  \newpage
+  \null
+  % --- タイトル（中央） ---
+  {\centering
+    {\Large\bfseries \@title \par}%
+  \par}
+  \vskip 4.0ex
+  % --- 日付（右寄せ） ---
+  \ifx\@date\@empty
+    % 日付が空なら何もしない
+  \else
+    {\raggedleft
+      {\normalsize \@date \par}
+    }
+  \fi
+  % --- 著者名（右寄せ） ---
+  {\raggedleft
+  {\normalsize \@author \par}
+  }
+  \vskip 1.0ex
+  \unhbox\abstractbox
+  \vskip 1.0ex
+}
+
+% --------------------------------------------------------------------
+% セクション見出し
+% --------------------------------------------------------------------
+\renewcommand\thesection{\@arabic\c@section.}
+\renewcommand\thesubsection{\thesection\@arabic\c@subsection}
+\renewcommand\thesubsubsection{\thesubsection.\@arabic\c@subsubsection}
+
+\renewcommand\section{\@startsection{section}{1}{\z@}
+  {5.0ex \@plus 3ex \@minus .5ex}
+  {1.5ex \@plus .5ex}
+  {\large\bfseries}}
+
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}
+  {2.0ex \@plus 0.8ex \@minus .2ex}
+  {1.0ex \@plus .4ex}
+  {\normalsize\bfseries}}
+
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}
+  {0.8ex \@plus 0.2ex \@minus .1ex}
+  {0.2ex \@plus .1ex}
+  {\normalsize\bfseries}}
+
+% --------------------------------------------------------------------
+% 図表関係
+% --------------------------------------------------------------------
+\setcounter{topnumber}{6}
+\setcounter{bottomnumber}{5}
+\setcounter{totalnumber}{11}
+\setcounter{dbltopnumber}{5}
+\renewcommand{\topfraction}{.999}
+\renewcommand{\dbltopfraction}{.999}
+\renewcommand{\bottomfraction}{.999}
+\renewcommand{\textfraction}{.001}
+\renewcommand{\floatpagefraction}{.999}
+\renewcommand{\dblfloatpagefraction}{.999}
+\setlength{\floatsep}{2ex}
+\setlength{\dblfloatsep}{\floatsep}
+\setlength{\textfloatsep}{2ex}
+\setlength{\dbltextfloatsep}{\textfloatsep}
+\setlength{\intextsep}{2ex}
+\setlength{\abovecaptionskip}{1.5ex}
+\setlength{\belowcaptionskip}{0ex}
+
+% --------------------------------------------------------------------
+% 参考文献
+% --------------------------------------------------------------------
+\renewcommand{\refname}{参考文献}
+\renewenvironment{thebibliography}[1]
+ {%
+   \begingroup
+     \centering
+     \normalsize\bfseries
+     \refname\par
+   \endgroup
+   \@mkboth{\refname}{\refname}%
+   \list{\@biblabel{\@arabic\c@enumiv}}%
+        {\settowidth\labelwidth{\@biblabel{#1}}%
+         \leftmargin\labelwidth
+         \advance\leftmargin\labelsep
+         \@openbib@code
+         \usecounter{enumiv}%
+         \let\p@enumiv\@empty
+         \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+   \sloppy
+   \clubpenalty4000
+   \@clubpenalty\clubpenalty
+   \widowpenalty4000%
+   \sfcode`\.\@m}
+ {\def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+   \endlist}
